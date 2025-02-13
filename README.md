@@ -1,5 +1,10 @@
 # HLID: a Human Lexicographically (sortable) Identifier
 
+[![pypi](https://img.shields.io/pypi/v/hlid.svg)](https://pypi.python.org/pypi/hlid/)
+[![python](https://img.shields.io/pypi/pyversions/hlid.svg)](https://github.com/threatpatrols/hlid/)
+[![build tests](https://github.com/threatpatrols/hlid/actions/workflows/build-tests.yml/badge.svg)](https://github.com/threatpatrols/hlid/actions/workflows/build-tests.yml)
+[![license](https://img.shields.io/github/license/threatpatrols/hlid.svg)](https://github.com/threatpatrols/hlid)
+
 The HLID is a human-readable lexicographically sortable identifier that borrows 
 similar concepts from -
 
@@ -36,6 +41,11 @@ For example a HLID value -
     |- 8x digits: year and month and day
     
     All values are zero-padded when required.
+```
+
+# Install
+```commandline
+pipx install hlid
 ```
 
 # Usage
