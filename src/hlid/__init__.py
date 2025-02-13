@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 
 class HLID:
