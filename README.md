@@ -106,3 +106,47 @@ Traceback (most recent call last):
 ValueError: HLID fails HMAC check.
 
 ```
+
+### Example: User data byte
+```python
+>>> from hlid import HLID
+
+>>> # Create HLID with custom user data
+>>> hlid = HLID(user_data="ff")
+>>> print(f"{hlid.user_data=}")
+hlid.user_data='ff'
+
+>>> # Extract user data from existing HLID
+>>> existing = HLID("20250213-1615-0320-90ff-723da4092594")
+>>> print(f"{existing.user_data=}")
+existing.user_data='ff'
+```
+
+### Example: Sorting and comparison
+```python
+>>> from hlid import HLID
+
+>>> # HLIDs are lexicographically sortable
+>>> hlid1 = HLID()
+>>> hlid2 = HLID()
+>>> hlid3 = HLID()
+
+>>> assert hlid1 < hlid2 < hlid3
+>>> sorted_hlids = sorted([hlid3, hlid1, hlid2])
+>>> assert sorted_hlids == [hlid1, hlid2, hlid3]
+```
+
+### Example: Creating HLIDs from specific datetimes
+```python
+>>> from hlid import HLID
+>>> from datetime import datetime, timezone
+
+>>> # Create HLID for a specific point in time
+>>> dt = datetime(2024, 11, 5, 11, 8, 52, 520000, tzinfo=timezone.utc)
+>>> hlid = HLID.from_datetime(dt)
+>>> print(hlid)
+20241105-1108-5252-0000-c8f3a1b2d4e5
+
+>>> print(f"{hlid.datetime=}")
+hlid.datetime=datetime.datetime(2024, 11, 5, 11, 8, 52, 520000, tzinfo=datetime.timezone.utc)
+```
