@@ -1,75 +1,92 @@
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+build-backend = "pdm.backend"
+requires = ["pdm-backend"]
 
-[tool.poetry]
-name = "hlid"
-version = "0.2.2"
-description = "HLID: a Human Lexicographically (sortable) Identifier"
-authors = ["Nicholas de Jong <contact@threatpatrols.com>"]
-license = "MIT"
-readme = "README.md"
-packages = [{ include = "hlid", from = "src" }]
+
+# ===
+[project]
+
+authors = [{name="Nicholas de Jong", email="ndejong@threatpatrols.com"}]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
 ]
+dependencies = [
+    "typing>=3.0"
+]
+description = "HLID: a Human Lexicographically (sortable) Identifier"
+license = {text = "MIT" }
+name = "hlid"
+requires-python = ">=3.8,<4"
+version = "0.2.2"
+readme = "README.md"
 keywords = ["HLID", "UUID", "ULID", "Sortable"]
 
-[tool.poetry.urls]
+[project.urls]
 "Bug Tracker" = "https://github.com/threatpatrols/hlid/issues"
 Documentation = "https://github.com/threatpatrols/hlid"
 Homepage = "https://pypi.python.org/pypi/hlid/"
 Repository = "https://github.com/threatpatrols/hlid"
 
 
-[tool.poetry.dependencies]
-python = "^3.8"
-typing = "*"
-
-[tool.poetry.dev-dependencies]
-black = "*"
-flake8 = "*"
-isort = "*"
-mypy = "*"
-pycln = "^2.1.3"
-pytest = "*"
-
+# ===
 [tool.slap]
 typed = true
 release.branch = "dev"
 
 [tool.slap.test]
-check  = "slap check"
-black  = "black --check src/ tests/"
-flake8 = "flake8 src/ tests/"
-isort  = "isort --check-only src/ tests/"
-mypy   = "dmypy run src/"
-pycln  = "pycln src/ tests/ --check"
+check = "slap check"
+mypy = "dmypy run src"
 pytest = "pytest tests/ -vv"
+ruff-format = "ruff format --check"
+ruff-lint = "ruff check"
 
 [tool.slap.run]
-format = "pycln src/ tests/ && black src/ tests/ && isort src/ tests/"
+format = "ruff format ."
+package-build = """set -e; \
+    slap release --validate \
+    && slap test \
+    && slap publish --dry --build-directory ./dist
+"""
+check-prereqs = """set -e; \
+    uv --help > /dev/null || (echo 'Failed uv prereq!' && exit 1); \
+    pdm --help > /dev/null || (echo 'Failed pdm prereq!' && exit 1); \
+    flit --help > /dev/null || (echo 'Failed flit prereq!' && exit 1); \
+    echo "Prereqs okay."
+"""
 
+
+# ===
 [tool.mypy]
-strict = true
-python_version = "3.10"
-explicit_package_bases = true
-mypy_path = ["src"]
-namespace_packages = true
 pretty = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+# exclude = ""
+namespace_packages = true
 show_error_codes = true
 show_error_context = true
 warn_no_return = true
-warn_redundant_casts = true
 warn_unreachable = true
-warn_unused_ignores = true
 
-[tool.isort]
-profile = "black"
-line_length = 120
-combine_as_imports = true
 
-[tool.black]
+# ===
+[tool.uv]
+dev-dependencies = [
+  "ruff",
+  "pytest",
+  "mypy",
+  "pytest-asyncio",
+  "types-psutil",
+]
+
+
+# ===
+[tool.ruff]
 line-length = 120
+
+[tool.ruff.lint]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = ["F401"]  # F401 module imported but unused

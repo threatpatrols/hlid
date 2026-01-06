@@ -53,7 +53,7 @@ class HLID:
         else:
             ts = dt_datetime.now(timezone.utc)
             ts_subseconds = ts.strftime("%f")[0:4]
-            hlid_ts = f"{ts.strftime(f'%Y%m%d-%H%M-%S')}{ts_subseconds[:2]}-{ts_subseconds[2:]}{user_data}"
+            hlid_ts = f"{ts.strftime('%Y%m%d-%H%M-%S')}{ts_subseconds[:2]}-{ts_subseconds[2:]}{user_data}"
             hlid_ts_suffix = self.__trunc_sha256_hmac_else_nonce(value=hlid_ts, secret=secret)
             self._value = f"{hlid_ts}-{hlid_ts_suffix}"
 
@@ -257,7 +257,7 @@ class HLID:
             raise ValueError(f"HLID user-data must contain only hex characters, got '{user_data}'.")
 
         # Build the HLID timestamp part
-        hlid_ts = f"{dt_utc.strftime('%Y%m%d-%H%M-%S')}" f"{subsecond_str[:2]}-{subsecond_str[2:]}{user_data}"
+        hlid_ts = f"{dt_utc.strftime('%Y%m%d-%H%M-%S')}{subsecond_str[:2]}-{subsecond_str[2:]}{user_data}"
 
         # Generate the nonce or HMAC suffix
         hlid_ts_suffix = _trunc_sha256_hmac_else_nonce(value=hlid_ts, secret=secret)
